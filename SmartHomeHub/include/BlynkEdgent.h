@@ -135,53 +135,54 @@ public:
 
 
 
-void manual_control()
-{
-  if (digitalRead(SwitchPin1) == LOW) {
-    delay(500); 
-    digitalWrite(RelayPin1, toggleState_1);
-    toggleState_1 = !toggleState_1;
-    Blynk.virtualWrite(DEVICE1, toggleState_1);
-    while(1){
-      if (digitalRead(SwitchPin1) == HIGH){
-        break;
-      }
+void manual_control() {
+  static bool prevSwitchState1 = HIGH;
+  static bool prevSwitchState2 = HIGH;
+  static bool prevSwitchState3 = HIGH;
+  static bool prevSwitchState4 = HIGH;
+
+  bool newSwitchState1 = digitalRead(SwitchPin1);
+  bool newSwitchState2 = digitalRead(SwitchPin2);
+  bool newSwitchState3 = digitalRead(SwitchPin3);
+  bool newSwitchState4 = digitalRead(SwitchPin4);
+
+  if (newSwitchState1 != prevSwitchState1) {
+    prevSwitchState1 = newSwitchState1;
+    if (newSwitchState1 == LOW) {
+      toggleState_1 = !toggleState_1;
+      digitalWrite(RelayPin1, toggleState_1);
+      Blynk.virtualWrite(DEVICE1, toggleState_1);
     }
   }
-  if (digitalRead(SwitchPin2) == LOW) {
-    delay(500); 
-    digitalWrite(RelayPin2, toggleState_2);
-    toggleState_2 = !toggleState_2;
-    Blynk.virtualWrite(DEVICE2, toggleState_2);
-    while(1){
-      if (digitalRead(SwitchPin2) == HIGH){
-        break;
-      }
+
+  if (newSwitchState2 != prevSwitchState2) {
+    prevSwitchState2 = newSwitchState2;
+    if (newSwitchState2 == LOW) {
+      toggleState_2 = !toggleState_2;
+      digitalWrite(RelayPin2, toggleState_2);
+      Blynk.virtualWrite(DEVICE2, toggleState_2);
     }
   }
-  if (digitalRead(SwitchPin3) == LOW) {
-    delay(500); 
-    digitalWrite(RelayPin3, toggleState_3);
-    toggleState_3 = !toggleState_3;
-    Blynk.virtualWrite(DEVICE3, toggleState_3);
-    while(1){
-      if (digitalRead(SwitchPin3) == HIGH){
-        break;
-      }
+
+  if (newSwitchState3 != prevSwitchState3) {
+    prevSwitchState3 = newSwitchState3;
+    if (newSwitchState3 == LOW) {
+      toggleState_3 = !toggleState_3;
+      digitalWrite(RelayPin3, toggleState_3);
+      Blynk.virtualWrite(DEVICE3, toggleState_3);
     }
   }
-    if (digitalRead(SwitchPin4) == LOW) {
-    delay(500); 
-    digitalWrite(RelayPin4, toggleState_4);
-    toggleState_4 = !toggleState_4;
-    Blynk.virtualWrite(DEVICE4, toggleState_4);
-    while(1){
-      if (digitalRead(SwitchPin4) == HIGH){
-        break;
-      }
+
+  if (newSwitchState4 != prevSwitchState4) {
+    prevSwitchState4 = newSwitchState4;
+    if (newSwitchState4 == LOW) {
+      toggleState_4 = !toggleState_4;
+      digitalWrite(RelayPin4, toggleState_4);
+      Blynk.virtualWrite(DEVICE4, toggleState_4);
     }
   }
 }
+
 
 void app_loop() {
   edgentTimer.run();
