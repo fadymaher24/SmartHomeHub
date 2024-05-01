@@ -12,15 +12,15 @@
 
 
 //-------------------For NodeMCU board
-#define RelayPin1 12 
-#define RelayPin2 13 
+#define RelayPin1 13
+#define RelayPin2 12
 #define RelayPin3 14 
-#define RelayPin4 16 
+#define RelayPin4 27 
 
-#define SwitchPin1 18
-#define SwitchPin2 19
-#define SwitchPin3 21
-#define SwitchPin4 23
+#define SwitchPin1  5
+#define SwitchPin2 18 
+#define SwitchPin3 19
+#define SwitchPin4 21
 
 
 #define wifiLed   2
