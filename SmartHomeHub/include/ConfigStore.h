@@ -29,6 +29,11 @@ struct ConfigStore {
 
   int       last_error;
 
+  void setFwVer(const char* ver) {
+    memset(version, 0, sizeof(version));
+    strncpy(version, ver, sizeof(version)-1);
+  }
+
   void setFlag(uint8_t mask, bool value) {
     if (value) {
       flags |= mask;
@@ -151,4 +156,3 @@ void config_set_last_error(int error) {
     config_save();
   }
 }
-

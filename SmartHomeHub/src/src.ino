@@ -1,10 +1,7 @@
-#include <DHT.h>
-#define DHTPIN 4
-#define DHTTYPE DHT22
-DHT dht(DHTPIN, DHTTYPE);
 
-#define BLYNK_TEMPLATE_ID "TMPL2sQH4QIN9"
-#define BLYNK_TEMPLATE_NAME "Home Assistant"
+
+#define BLYNK_TEMPLATE_ID "TMPL2hSz_DqXl"
+#define BLYNK_TEMPLATE_NAME "Quickstart Template"
 
 #define BLYNK_FIRMWARE_VERSION        "0.1.0"
 
@@ -18,10 +15,12 @@ DHT dht(DHTPIN, DHTTYPE);
 #define RelayPin1 12 
 #define RelayPin2 13 
 #define RelayPin3 14 
+#define RelayPin4 16 
 
 #define SwitchPin1 18
 #define SwitchPin2 19
 #define SwitchPin3 21
+#define SwitchPin4 23
 
 
 #define wifiLed   2
@@ -36,13 +35,14 @@ DHT dht(DHTPIN, DHTTYPE);
 bool toggleState_1 = LOW; //Define integer to remember the toggle state for relay 1
 bool toggleState_2 = LOW; //Define integer to remember the toggle state for relay 2
 bool toggleState_3 = LOW; //Define integer to remember the toggle state for relay 3
+bool toggleState_4 = LOW; //Define integer to remember the toggle state for relay 3
 
 float t = 0;
 float h = 0;
 long long prevmillis = millis();
 long long timeout = 1000;
 
-#include "BlynkEdgent.h"
+#include "../include/BlynkEdgent.h"
 //BlynkTimer timer;
 BLYNK_CONNECTED() {
   // Request the latest state from the server
@@ -69,50 +69,44 @@ BLYNK_WRITE(DEVICE3) {
   digitalWrite(RelayPin3, toggleState_3);
 }
 
-void sendSensor()
-{
-  if(millis() - prevmillis >= timeout)
-  {
-    h = dht.readHumidity();
-    t = dht.readTemperature();
- 
-    if (isnan(h) || isnan(t)) {
-      //Serial.println("Failed to read from DHT sensor!");
-      return;
-    }
-    prevmillis = millis();
-  }
+BLYNK_WRITE(DEVICE4) {
+  toggleState_4 = param.asInt();
+  digitalWrite(RelayPin4, toggleState_4);
 }
+
+
 void setup()
 {
   Serial.begin(115200);
   delay(100);
 
-  dht.begin();
-
   pinMode(RelayPin1, OUTPUT);
   pinMode(RelayPin2, OUTPUT);
+  pinMode(RelayPin3, OUTPUT);
+  pinMode(RelayPin4, OUTPUT);
 
   pinMode(wifiLed, OUTPUT);
 
   pinMode(SwitchPin1, INPUT_PULLUP);
   pinMode(SwitchPin2, INPUT_PULLUP);
+  pinMode(SwitchPin3, INPUT_PULLUP);
+  pinMode(SwitchPin4, INPUT_PULLUP);
 
   //During Starting all Relays should TURN OFF
   digitalWrite(RelayPin1, HIGH);
   digitalWrite(RelayPin2, HIGH);
+  digitalWrite(RelayPin3, HIGH);
+  digitalWrite(RelayPin4, HIGH);
 
   BlynkEdgent.begin();
 
   Blynk.virtualWrite(DEVICE1, toggleState_1);
   Blynk.virtualWrite(DEVICE2, toggleState_2);
   Blynk.virtualWrite(DEVICE3, toggleState_3);
-  Blynk.virtualWrite(DEVICE4, t);
-  //timer.setInterval(1000L, sendSensor);
+  Blynk.virtualWrite(DEVICE4, toggleState_4);
 }
 
 void loop() {
-    sendSensor();
     BlynkEdgent.run();
     //timer.run();
     manual_control();

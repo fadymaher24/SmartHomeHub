@@ -1,4 +1,3 @@
-
 #ifdef BOARD_BUTTON_PIN
 
 volatile bool     g_buttonPressed = false;
@@ -9,6 +8,7 @@ void button_action(void)
   BlynkState::set(MODE_RESET_CONFIG);
 }
 
+IRAM_ATTR
 void button_change(void)
 {
 #if BOARD_BUTTON_ACTIVE_LOW

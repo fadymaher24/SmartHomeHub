@@ -25,6 +25,15 @@
   #define BOARD_LED_INVERSE           false
   #define BOARD_LED_BRIGHTNESS        64
 
+#elif defined(USE_TTGO_T7_S3)
+
+  #define BOARD_BUTTON_PIN            0
+  #define BOARD_BUTTON_ACTIVE_LOW     true
+
+  #define BOARD_LED_PIN               17
+  #define BOARD_LED_INVERSE           false
+  #define BOARD_LED_BRIGHTNESS        64
+
 #elif defined(USE_TTGO_T_OI)
 
   #warning "This board does not have a button. Connect a button to gpio0 <> GND"
@@ -65,7 +74,7 @@
 
   #warning "Custom board configuration is used"
 
-  #define BOARD_BUTTON_PIN            34                     // Pin where user button is attached
+  #define BOARD_BUTTON_PIN            0                     // Pin where user button is attached
   #define BOARD_BUTTON_ACTIVE_LOW     true                  // true if button is "active-low"
 
   //#define BOARD_LED_PIN             4                     // Set LED pin - if you have a single-color LED attached
@@ -88,12 +97,6 @@
 #define BUTTON_PRESS_TIME_ACTION      50
 
 #define BOARD_PWM_MAX                 1023
-
-#define BOARD_LEDC_CHANNEL_1          1
-#define BOARD_LEDC_CHANNEL_2          2
-#define BOARD_LEDC_CHANNEL_3          3
-#define BOARD_LEDC_TIMER_BITS         10
-#define BOARD_LEDC_BASE_FREQ          12000
 
 #if !defined(CONFIG_DEVICE_PREFIX)
 #define CONFIG_DEVICE_PREFIX          "Blynk"
@@ -121,6 +124,8 @@
 //#define USE_TIMER_FIVE
 #define USE_PTHREAD
 
+// Disable built-in analog and digital pin control
+#define BLYNK_NO_BUILTIN
 #define BLYNK_NO_DEFAULT_BANNER
 
 #if defined(APP_DEBUG)
@@ -130,4 +135,3 @@
   #define DEBUG_PRINT(...)
   #define DEBUG_PRINTF(...)
 #endif
-

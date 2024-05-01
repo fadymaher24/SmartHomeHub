@@ -1,23 +1,10 @@
 
 extern "C" {
   void app_loop();
-  void restartMCU();
 }
 
 #include "Settings.h"
 #include <BlynkSimpleEsp32_SSL.h>
-
-#if defined(BLYNK_USE_LITTLEFS)
-  #include <LittleFS.h>
-  #define BLYNK_FS LittleFS
-#elif defined(BLYNK_USE_SPIFFS)
-  #if defined(ESP32)
-    #include <SPIFFS.h>
-  #elif defined(ESP8266)
-    #include <FS.h>
-  #endif
-  #define BLYNK_FS SPIFFS
-#endif
 
 #ifndef BLYNK_NEW_LIBRARY
 #error "Old version of Blynk library is in use. Please replace it with the new one."
@@ -37,6 +24,7 @@ extern "C" {
 
 BlynkTimer edgentTimer;
 
+#include "SysUtils.h"
 #include "BlynkState.h"
 #include "ConfigStore.h"
 #include "ResetButton.h"
@@ -45,7 +33,7 @@ BlynkTimer edgentTimer;
 #include "OTA.h"
 #include "Console.h"
 
-void manual_control();
+
 inline
 void BlynkState::set(State m) {
   if (state != m && m < MODE_MAX_VALUE) {
@@ -62,7 +50,7 @@ void printDeviceBanner()
 #ifdef BLYNK_PRINT
   Blynk.printBanner();
   BLYNK_PRINT.println("----------------------------------------------------");
-  BLYNK_PRINT.print(" Device:    "); BLYNK_PRINT.println(getWiFiName());
+  BLYNK_PRINT.print(" Device:    "); BLYNK_PRINT.println(systemGetDeviceName());
   BLYNK_PRINT.print(" Firmware:  "); BLYNK_PRINT.println(BLYNK_FIRMWARE_VERSION " (build " __DATE__ " " __TIME__ ")");
   if (configStore.getFlag(CONFIG_FLAG_VALID)) {
     BLYNK_PRINT.print(" Token:     ");
@@ -102,9 +90,7 @@ public:
     WiFi.setMinSecurity(WIFI_AUTH_WEP);
 #endif
 
-#ifdef BLYNK_FS
-    BLYNK_FS.begin(true);
-#endif
+    systemInit();
 
     indicator_init();
     button_init();
@@ -146,11 +132,8 @@ public:
 
 } BlynkEdgent;
 
-void app_loop() {
-    edgentTimer.run();
-    edgentConsole.run();
-    manual_control();
-}
+
+
 
 void manual_control()
 {
@@ -187,4 +170,21 @@ void manual_control()
       }
     }
   }
+    if (digitalRead(SwitchPin4) == LOW) {
+    delay(500); 
+    digitalWrite(RelayPin4, toggleState_4);
+    toggleState_4 = !toggleState_4;
+    Blynk.virtualWrite(DEVICE4, toggleState_4);
+    while(1){
+      if (digitalRead(SwitchPin4) == HIGH){
+        break;
+      }
+    }
+  }
+}
+
+void app_loop() {
+  edgentTimer.run();
+  edgentConsole.run();
+  manual_control(); // Call the manual_control function
 }
