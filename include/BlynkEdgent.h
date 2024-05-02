@@ -149,9 +149,12 @@ void manual_control() {
   if (newSwitchState1 != prevSwitchState1) {
     prevSwitchState1 = newSwitchState1;
     if (newSwitchState1 == LOW) {
-      toggleState_1 = !toggleState_1;
-      digitalWrite(RelayPin1, toggleState_1);
-      Blynk.virtualWrite(DEVICE1, toggleState_1);
+      digitalWrite(RelayPin1, HIGH);
+      Blynk.virtualWrite(DEVICE1, HIGH);
+    }
+    else {
+      digitalWrite(RelayPin1, LOW);
+      Blynk.virtualWrite(DEVICE1, LOW);
     }
   }
 

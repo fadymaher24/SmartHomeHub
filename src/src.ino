@@ -11,7 +11,7 @@
 #define APP_DEBUG
 
 
-//-------------------For NodeMCU board
+//---------------For ESP32 board
 #define RelayPin1 13
 #define RelayPin2 12
 #define RelayPin3 14 
@@ -22,20 +22,18 @@
 #define SwitchPin3 19
 #define SwitchPin4 21
 
-
-#define wifiLed   2
-
 //Change the virtual pins according the rooms
 #define DEVICE1    V0
 #define DEVICE2    V1
 #define DEVICE3    V2
 #define DEVICE4    V3
+#define ALL        V4
 
 // Relay State
 bool toggleState_1 = LOW; //Define integer to remember the toggle state for relay 1
 bool toggleState_2 = LOW; //Define integer to remember the toggle state for relay 2
 bool toggleState_3 = LOW; //Define integer to remember the toggle state for relay 3
-bool toggleState_4 = LOW; //Define integer to remember the toggle state for relay 3
+bool toggleState_4 = LOW; //Define integer to remember the toggle state for relay 4
 
 float t = 0;
 float h = 0;
@@ -74,6 +72,14 @@ BLYNK_WRITE(DEVICE4) {
   digitalWrite(RelayPin4, toggleState_4);
 }
 
+BLYNK_WRITE(ALL) {
+  int pinValue = param.asInt();
+  digitalWrite(RelayPin1, pinValue);
+  digitalWrite(RelayPin2, pinValue);
+  digitalWrite(RelayPin3, pinValue);
+  digitalWrite(RelayPin4, pinValue);
+}
+
 
 void setup()
 {
@@ -84,8 +90,6 @@ void setup()
   pinMode(RelayPin2, OUTPUT);
   pinMode(RelayPin3, OUTPUT);
   pinMode(RelayPin4, OUTPUT);
-
-  pinMode(wifiLed, OUTPUT);
 
   pinMode(SwitchPin1, INPUT_PULLUP);
   pinMode(SwitchPin2, INPUT_PULLUP);
@@ -104,6 +108,7 @@ void setup()
   Blynk.virtualWrite(DEVICE2, toggleState_2);
   Blynk.virtualWrite(DEVICE3, toggleState_3);
   Blynk.virtualWrite(DEVICE4, toggleState_4);
+
 }
 
 void loop() {
