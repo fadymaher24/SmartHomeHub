@@ -30,10 +30,10 @@
 #define ALL        V4
 
 // Relay State
-bool toggleState_1 = LOW; //Define integer to remember the toggle state for relay 1
-bool toggleState_2 = LOW; //Define integer to remember the toggle state for relay 2
-bool toggleState_3 = LOW; //Define integer to remember the toggle state for relay 3
-bool toggleState_4 = LOW; //Define integer to remember the toggle state for relay 4
+bool switchState_1 = LOW; //Define integer to remember the toggle state for relay 1
+bool switchState_2 = LOW; //Define integer to remember the toggle state for relay 2
+bool switchState_3 = LOW; //Define integer to remember the toggle state for relay 3
+bool switchState_4 = LOW; //Define integer to remember the toggle state for relay 4
 
 float t = 0;
 float h = 0;
@@ -52,32 +52,36 @@ BLYNK_CONNECTED() {
 
 
 BLYNK_WRITE(DEVICE1) {
-  toggleState_1 = param.asInt();
-  //Serial.println(toggleState_1);
-  digitalWrite(RelayPin1, toggleState_1);
+  switchState_1 = param.asInt();
+  //Serial.println(switchState_1);
+  digitalWrite(RelayPin1, switchState_1);
 }
 
 BLYNK_WRITE(DEVICE2) {
-  toggleState_2 = param.asInt();
-  digitalWrite(RelayPin2, toggleState_2);
+  switchState_2 = param.asInt();
+  digitalWrite(RelayPin2, switchState_2);
 }
 
 BLYNK_WRITE(DEVICE3) {
-  toggleState_3 = param.asInt();
-  digitalWrite(RelayPin3, toggleState_3);
+  switchState_3 = param.asInt();
+  digitalWrite(RelayPin3, switchState_3);
 }
 
 BLYNK_WRITE(DEVICE4) {
-  toggleState_4 = param.asInt();
-  digitalWrite(RelayPin4, toggleState_4);
+  switchState_4 = param.asInt();
+  digitalWrite(RelayPin4, switchState_4);
 }
 
 BLYNK_WRITE(ALL) {
   int pinValue = param.asInt();
   digitalWrite(RelayPin1, pinValue);
+  Blynk.virtualWrite(DEVICE1, pinValue);
   digitalWrite(RelayPin2, pinValue);
+  Blynk.virtualWrite(DEVICE2, pinValue);
   digitalWrite(RelayPin3, pinValue);
+  Blynk.virtualWrite(DEVICE3, pinValue);
   digitalWrite(RelayPin4, pinValue);
+  Blynk.virtualWrite(DEVICE4, pinValue);
 }
 
 
@@ -104,10 +108,10 @@ void setup()
 
   BlynkEdgent.begin();
 
-  Blynk.virtualWrite(DEVICE1, toggleState_1);
-  Blynk.virtualWrite(DEVICE2, toggleState_2);
-  Blynk.virtualWrite(DEVICE3, toggleState_3);
-  Blynk.virtualWrite(DEVICE4, toggleState_4);
+  Blynk.virtualWrite(DEVICE1, switchState_1);
+  Blynk.virtualWrite(DEVICE2, switchState_2);
+  Blynk.virtualWrite(DEVICE3, switchState_3);
+  Blynk.virtualWrite(DEVICE4, switchState_4);
 
 }
 

@@ -161,27 +161,27 @@ void manual_control() {
   if (newSwitchState2 != prevSwitchState2) {
     prevSwitchState2 = newSwitchState2;
     if (newSwitchState2 == LOW) {
-      toggleState_2 = !toggleState_2;
-      digitalWrite(RelayPin2, toggleState_2);
-      Blynk.virtualWrite(DEVICE2, toggleState_2);
+      switchState_2 = !switchState_2;
+      digitalWrite(RelayPin2, switchState_2);
+      Blynk.virtualWrite(DEVICE2, switchState_2);
     }
   }
 
   if (newSwitchState3 != prevSwitchState3) {
     prevSwitchState3 = newSwitchState3;
     if (newSwitchState3 == LOW) {
-      toggleState_3 = !toggleState_3;
-      digitalWrite(RelayPin3, toggleState_3);
-      Blynk.virtualWrite(DEVICE3, toggleState_3);
+      switchState_3 = !switchState_3;
+      digitalWrite(RelayPin3, switchState_3);
+      Blynk.virtualWrite(DEVICE3, switchState_3);
     }
   }
 
   if (newSwitchState4 != prevSwitchState4) {
     prevSwitchState4 = newSwitchState4;
     if (newSwitchState4 == LOW) {
-      toggleState_4 = !toggleState_4;
-      digitalWrite(RelayPin4, toggleState_4);
-      Blynk.virtualWrite(DEVICE4, toggleState_4);
+      switchState_4 = !switchState_4;
+      digitalWrite(RelayPin4, switchState_4);
+      Blynk.virtualWrite(DEVICE4, switchState_4);
     }
   }
 }
